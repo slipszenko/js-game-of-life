@@ -125,6 +125,7 @@ function restart() {
     times = [];
     generation = 0;
     buildTable(grid);
+    document.querySelector("#generation-count").innerHTML = 0;
 }
 
 function init() {
