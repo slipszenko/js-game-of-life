@@ -1,14 +1,19 @@
 var grid = createGrid(25, 50);
+var times = [];
 
 function createGrid(y, x) {
     g = [];
     for(i = 0; i < y; i++) {
         g[i] = [];
         for(j = 0; j < x; j++) {
-            g[i][j] = 0;
+            g[i][j] = getRandomInt(0, 1);
         }
     }
     return g;
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 var myWorker = new Worker("gol-worker.js");
@@ -51,6 +56,7 @@ function buildTable(gridToDraw) {
 
 function nextGeneration() {
     var nextGenGrid = createGrid(grid.length, grid[0].length);
+    var start = new Date().getTime();
 
     // Perform calculations
     for(var y = 0; y < grid.length; y++) {
@@ -58,6 +64,9 @@ function nextGeneration() {
             nextGenGrid[y][x] = processCell(y, x);
         }
     }
+
+    var stop = new Date().getTime();
+    times[times.length] = stop - start;
 
     // Update and redraw the grid
     grid = nextGenGrid;
@@ -91,12 +100,29 @@ function processCell(y, x) {
     return 0;
 }
 
+function startProcessing() {
+    var iterations = parseInt(document.querySelector("#how-many-gens").value);
+    for(var i = 0; i < iterations; i++) {
+        window.setTimeout(nextGeneration, 100 * i);
+    }
+}
+
+function averageTime() {
+    totalTime = 0;
+    for(var i = 0; i < times.length; i++) {
+        totalTime += times[i];
+    }
+    console.log(totalTime);
+    console.log(times.length);
+    return totalTime / times.length;
+}
+
 function init() {
     // Create the blank table
     buildTable(grid);
 
     // Activate the next generation button
-    document.querySelector("#next-generation").addEventListener("click", nextGeneration);
+    document.querySelector("#next-generation").addEventListener("click", startProcessing);
 
     myWorker.postMessage("ali");
 }
