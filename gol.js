@@ -1,5 +1,6 @@
 var grid = createGrid(25, 50);
 var times = [];
+var generation = 0;
 
 function createGrid(y, x) {
     g = [];
@@ -71,6 +72,8 @@ function nextGeneration() {
     // Update and redraw the grid
     grid = nextGenGrid;
     buildTable(grid);
+    generation++;
+    document.querySelector("#generation-count").innerHTML = generation;
 }
 
 function processCell(y, x) {
@@ -103,7 +106,7 @@ function processCell(y, x) {
 function startProcessing() {
     var iterations = parseInt(document.querySelector("#how-many-gens").value);
     for(var i = 0; i < iterations; i++) {
-        window.setTimeout(nextGeneration, 100 * i);
+        window.setTimeout(nextGeneration, 50 * i);
     }
 }
 
@@ -117,12 +120,22 @@ function averageTime() {
     return totalTime / times.length;
 }
 
+function restart() {
+    grid = createGrid(25, 50);
+    times = [];
+    generation = 0;
+    buildTable(grid);
+}
+
 function init() {
     // Create the blank table
     buildTable(grid);
 
     // Activate the next generation button
     document.querySelector("#next-generation").addEventListener("click", startProcessing);
+
+    // Activate the restart button
+    document.querySelector("#restart").addEventListener("click", restart);
 
     myWorker.postMessage("ali");
 }
