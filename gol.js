@@ -74,7 +74,7 @@ function nextGeneration() {
         var startRow = i * divider;
         var stopRow = startRow + divider - 1;
         if(stopRow > grid.length) {
-            stopRow == stopRow - i;
+            stopRow = stopRow - i;
         }
         console.log(startRow, stopRow);
         workers[i].postMessage({
