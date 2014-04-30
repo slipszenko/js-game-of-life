@@ -102,7 +102,7 @@ function generationComplete() {
     if(iterationsToGo > 0) {
         // Add a slight pause so the animation can be seen
         console.log("test");
-        window.setTimeout(function() { console.log("test2"); nextGeneration(); }, 200);
+        window.setTimeout(nextGeneration, 50);
     }
 }
 
