@@ -3,6 +3,7 @@ var grid;
 onmessage = function(e) {
     grid = e.data.grid;
     var nextGenGrid = createGrid(grid.length, grid[0].length, true); // Use to slice to pass by value
+    console.log(grid)
 
     // Perform calculations
     for(var y = e.data.startRow; y <= e.data.stopRow; y++) {
@@ -46,12 +47,12 @@ function processCell(y, x) {
     return 0;
 }
 
-function createGrid(y, x, empty) {
+function createGrid(y, x) {
     g = [];
     for(i = 0; i < y; i++) {
         g[i] = [];
         for(j = 0; j < x; j++) {
-            g[i][j] = empty ? 0 : getRandomInt(0, 1);
+            g[i][j] = 0;
         }
     }
     return g;
