@@ -79,7 +79,7 @@ function nextGeneration() {
         }
         console.log(startRow, stopRow);
         workers[i].postMessage({
-            "grid" : grid,
+            "grid" : grid.slice(0),
             "startRow" : startRow,
             "stopRow" : stopRow
         });
