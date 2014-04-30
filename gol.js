@@ -140,7 +140,7 @@ function averageTime() {
 }
 
 function restart() {
-    grid = createGrid(25, 50, false);
+    grid = createGrid(grid.length, grid[0].length, false);
     times = [];
     generation = 0;
     buildTable(grid);
