@@ -3,7 +3,6 @@ var grid;
 onmessage = function(e) {
     grid = e.data.grid;
     var nextGenGrid = createGrid(grid.length, grid[0].length, true); // Use to slice to pass by value
-    console.log(grid)
 
     // Perform calculations
     for(var y = e.data.startRow; y <= e.data.stopRow; y++) {
