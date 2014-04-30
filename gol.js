@@ -147,6 +147,11 @@ function restart() {
     document.querySelector("#generation-count").innerHTML = 0;
 }
 
+function workerSliderChange() {
+    nWorkers = document.querySelector("#workers-to-use").value;
+    document.querySelector("#workers-in-use").innerHTML = nWorkers;
+}
+
 function init() {
     // Create the blank table
     buildTable(grid);
@@ -161,5 +166,9 @@ function init() {
 
     // Activate the restart button
     document.querySelector("#restart").addEventListener("click", restart);
+
+    // Activate the workers slider
+    document.querySelector("#workers-in-use").innerHTML = nWorkers;
+    document.querySelector("#workers-to-use").addEventListener("change", workerSliderChange);
 }
 window.addEventListener("load", init);
