@@ -1,7 +1,7 @@
 var grid = createGrid(25, 50, false);
 var times = [];
 var generation = 0;
-var nWorkers = 1; // The number of workers to use, no greater than 8 until I find a better way to divide labour
+var nWorkers = 2; // The number of workers to use, no greater than 8 until I find a better way to divide labour
 var returnedWorkers = 0;
 var workers = [];
 var nextGenGrid;
@@ -96,12 +96,9 @@ function generationComplete() {
     document.querySelector("#generation-count").innerHTML = generation;
 
     // Go to the next generation?
-    console.log(iterationsToGo);
     iterationsToGo--;
-    console.log(iterationsToGo);
     if(iterationsToGo > 0) {
         // Add a slight pause so the animation can be seen
-        console.log("test");
         window.setTimeout(nextGeneration, 50);
     }
 }
@@ -143,8 +140,6 @@ function averageTime() {
     for(var i = 0; i < times.length; i++) {
         totalTime += times[i];
     }
-    console.log(totalTime);
-    console.log(times.length);
     return totalTime / times.length;
 }
 
