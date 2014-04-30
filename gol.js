@@ -73,10 +73,6 @@ function nextGeneration() {
 
         var startRow = i * divider;
         var stopRow = startRow + divider - 1;
-        if(stopRow > grid.length - 1) {
-            stopRow = stopRow - i;
-            console.log("stopRowLowered");
-        }
         console.log(startRow, stopRow);
         workers[i].postMessage({
             "grid" : grid,
