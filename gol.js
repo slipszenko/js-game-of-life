@@ -150,6 +150,12 @@ function restart() {
 function workerSliderChange() {
     nWorkers = document.querySelector("#workers-to-use").value;
     document.querySelector("#workers-in-use").innerHTML = nWorkers;
+    
+    // Set up the workers
+    workers = [];
+    for(var i = 0; i < nWorkers; i++) {
+        workers[i] = new Worker("gol-worker.js");
+    }
 }
 
 function init() {
