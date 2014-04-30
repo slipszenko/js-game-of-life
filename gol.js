@@ -60,7 +60,7 @@ function nextGeneration() {
 
     for(var i = 0; i < nWorkers; i++) {
         workers[i].onmessage = function(e) {
-            for(var j = e.data.startRow; j < e.data.stopRow; j++) {
+            for(var j = e.data.startRow; j <= e.data.stopRow; j++) {
                 nextGenGrid[j] = e.data.grid[j];
             }
 
