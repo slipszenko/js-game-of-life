@@ -150,7 +150,7 @@ function restart() {
 function workerSliderChange() {
     nWorkers = document.querySelector("#workers-to-use").value;
     document.querySelector("#workers-in-use").innerHTML = nWorkers;
-    
+
     // Set up the workers
     workers = [];
     for(var i = 0; i < nWorkers; i++) {
@@ -175,6 +175,7 @@ function init() {
 
     // Activate the workers slider
     document.querySelector("#workers-in-use").innerHTML = nWorkers;
+    document.querySelector("#workers-to-use").value = nWorkers;
     document.querySelector("#workers-to-use").addEventListener("change", workerSliderChange);
 }
 window.addEventListener("load", init);
