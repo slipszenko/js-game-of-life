@@ -1,13 +1,18 @@
-var grid = createGrid(25, 50);
+var grid = createGrid(25, 50, false);
 var times = [];
 var generation = 0;
+var nWorkers = 1; // The number of workers to use, no greater than 8 until I find a better way to divide labour
+var returnedWorkers = 0;
+var workers = [];
+var nextGenGrid;
+var iterationsToGo = 0;
 
-function createGrid(y, x) {
+function createGrid(y, x, empty) {
     g = [];
     for(i = 0; i < y; i++) {
         g[i] = [];
         for(j = 0; j < x; j++) {
-            g[i][j] = getRandomInt(0, 1);
+            g[i][j] = empty ? 0 : getRandomInt(0, 1);
         }
     }
     return g;
@@ -16,13 +21,6 @@ function createGrid(y, x) {
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-var myWorker = new Worker("gol-worker.js");
-
-myWorker.onmessage = function(oEvent) {
-    console.log("Worker said : " + oEvent.data);
-};
-
 
 function toggleCell() {
     // Swap the value of this cell in the grid var and mark it as alive as appropriate
@@ -56,24 +54,56 @@ function buildTable(gridToDraw) {
 }
 
 function nextGeneration() {
-    var nextGenGrid = createGrid(grid.length, grid[0].length);
-    var start = new Date().getTime();
+    nextGenGrid = createGrid(grid.length, grid[0].length, true);
+    //var start = new Date().getTime();
+    var divider = Math.ceil(grid.length / nWorkers);
 
-    // Perform calculations
-    for(var y = 0; y < grid.length; y++) {
-        for(var x = 0; x < grid[y].length; x++) {
-            nextGenGrid[y][x] = processCell(y, x);
+    for(var i = 0; i < nWorkers; i++) {
+        workers[i].onmessage = function(e) {
+            for(var j = e.data.startRow; j < e.data.stopRow; j++) {
+                nextGenGrid[j] = e.data.grid[j];
+            }
+
+            returnedWorkers++;
+            if(returnedWorkers == nWorkers) {
+                returnedWorkers = 0;
+                generationComplete();
+            }
+        };
+
+        var startRow = i * divider;
+        var stopRow = startRow + divider - 1;
+        if(stopRow > grid.length) {
+            stopRow == stopRow - i;
         }
+        console.log(startRow, stopRow);
+        workers[i].postMessage({
+            "grid" : grid,
+            "startRow" : startRow,
+            "stopRow" : stopRow
+        });
     }
 
-    var stop = new Date().getTime();
-    times[times.length] = stop - start;
+    //var stop = new Date().getTime();
+    //times[times.length] = stop - start;
+}
 
+function generationComplete() {
     // Update and redraw the grid
     grid = nextGenGrid;
     buildTable(grid);
     generation++;
     document.querySelector("#generation-count").innerHTML = generation;
+
+    // Go to the next generation?
+    console.log(iterationsToGo);
+    iterationsToGo--;
+    console.log(iterationsToGo);
+    if(iterationsToGo > 0) {
+        // Add a slight pause so the animation can be seen
+        console.log("test");
+        window.setTimeout(function() { console.log("test2"); nextGeneration(); }, 200);
+    }
 }
 
 function processCell(y, x) {
@@ -104,10 +134,8 @@ function processCell(y, x) {
 }
 
 function startProcessing() {
-    var iterations = parseInt(document.querySelector("#how-many-gens").value);
-    for(var i = 0; i < iterations; i++) {
-        window.setTimeout(nextGeneration, 50 * i);
-    }
+    iterationsToGo = parseInt(document.querySelector("#how-many-gens").value);
+    nextGeneration();
 }
 
 function averageTime() {
@@ -121,7 +149,7 @@ function averageTime() {
 }
 
 function restart() {
-    grid = createGrid(25, 50);
+    grid = createGrid(25, 50, false);
     times = [];
     generation = 0;
     buildTable(grid);
@@ -132,12 +160,15 @@ function init() {
     // Create the blank table
     buildTable(grid);
 
+    // Set up the workers
+    for(var i = 0; i < nWorkers; i++) {
+        workers[i] = new Worker("gol-worker.js");
+    }
+
     // Activate the next generation button
-    document.querySelector("#next-generation").addEventListener("click", startProcessing);
+    document.querySelector("#start-button").addEventListener("click", startProcessing);
 
     // Activate the restart button
     document.querySelector("#restart").addEventListener("click", restart);
-
-    myWorker.postMessage("ali");
 }
 window.addEventListener("load", init);
