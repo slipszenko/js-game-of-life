@@ -2,7 +2,7 @@ var grid;
 
 onmessage = function(e) {
     grid = e.data.grid;
-    var nextGenGrid = grid.slice(0); // Use to slice to pass by value
+    var nextGenGrid = createGrid(grid.length, grid[0].length, true); // Use to slice to pass by value
 
     // Perform calculations
     for(var y = e.data.startRow; y <= e.data.stopRow; y++) {
@@ -44,4 +44,15 @@ function processCell(y, x) {
         return 1;
     }
     return 0;
+}
+
+function createGrid(y, x, empty) {
+    g = [];
+    for(i = 0; i < y; i++) {
+        g[i] = [];
+        for(j = 0; j < x; j++) {
+            g[i][j] = empty ? 0 : getRandomInt(0, 1);
+        }
+    }
+    return g;
 }

@@ -4,7 +4,7 @@ var generation = 0;
 var nWorkers = 2; // The number of workers to use, no greater than 8 until I find a better way to divide labour
 var returnedWorkers = 0;
 var workers = [];
-var nextGenGrid;
+var nextGenGrid = createGrid(grid.length, grid[0].length, true);
 var iterationsToGo = 0;
 
 function createGrid(y, x, empty) {
@@ -54,8 +54,6 @@ function buildTable(gridToDraw) {
 }
 
 function nextGeneration() {
-    nextGenGrid = createGrid(grid.length, grid[0].length, true);
-    //var start = new Date().getTime();
     var divider = Math.ceil(grid.length / nWorkers);
 
     for(var i = 0; i < nWorkers; i++) {
@@ -79,20 +77,18 @@ function nextGeneration() {
         }
         console.log(startRow, stopRow);
         workers[i].postMessage({
-            "grid" : grid.slice(0),
+            "grid" : grid,
             "startRow" : startRow,
             "stopRow" : stopRow
         });
     }
-
-    //var stop = new Date().getTime();
-    //times[times.length] = stop - start;
 }
 
 function generationComplete() {
     // Update and redraw the grid
     grid = nextGenGrid;
     buildTable(grid);
+    nextGenGrid = createGrid(grid.length, grid[0].length, true);
     generation++;
     document.querySelector("#generation-count").innerHTML = generation;
 
