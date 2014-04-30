@@ -5,7 +5,7 @@ onmessage = function(e) {
     var nextGenGrid = grid.slice(0); // Use to slice to pass by value
 
     // Perform calculations
-    for(var y = e.data.startRow; y < e.data.stopRow; y++) {
+    for(var y = e.data.startRow; y <= e.data.stopRow; y++) {
         for(var x = 0; x < grid[y].length; x++) {
             nextGenGrid[y][x] = processCell(y, x);
         }
