@@ -1,7 +1,7 @@
 var grid = createGrid(25, 50, false);
 var times = [];
 var generation = 0;
-var nWorkers = 4; // The number of workers to use, no greater than 8 until I find a better way to divide labour
+var nWorkers = 1; // The number of workers to use, no greater than 8 until I find a better way to divide labour
 var returnedWorkers = 0;
 var workers = [];
 var nextGenGrid = createGrid(grid.length, grid[0].length, true);
