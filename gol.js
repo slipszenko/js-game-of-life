@@ -7,6 +7,9 @@ var workers = [];
 var nextGenGrid = createGrid(grid.length, grid[0].length, true);
 var iterationsToGo = 0;
 
+var startTime, stopTime;
+var totalTime = 0;
+
 function createGrid(y, x, empty) {
     g = [];
     for(i = 0; i < y; i++) {
@@ -55,6 +58,7 @@ function buildTable(gridToDraw) {
 
 function nextGeneration() {
     var divider = Math.ceil(grid.length / nWorkers);
+    startTime = new Date().getTime();
 
     for(var i = 0; i < nWorkers; i++) {
         workers[i].onmessage = function(e) {
@@ -91,25 +95,22 @@ function generationComplete() {
     generation++;
     document.querySelector("#generation-count").innerHTML = generation;
 
+    stopTime = new Date().getTime();
+    totalTime += stopTime - startTime;
+
     // Go to the next generation?
     iterationsToGo--;
     if(iterationsToGo > 0) {
         // Add a slight pause so the animation can be seen
         window.setTimeout(nextGeneration, 50);
+    } else {
+        console.log("Total time: " + totalTime);
     }
 }
 
 function startProcessing() {
     iterationsToGo = parseInt(document.querySelector("#how-many-gens").value);
     nextGeneration();
-}
-
-function averageTime() {
-    totalTime = 0;
-    for(var i = 0; i < times.length; i++) {
-        totalTime += times[i];
-    }
-    return totalTime / times.length;
 }
 
 function restart() {
