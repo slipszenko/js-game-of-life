@@ -99,33 +99,6 @@ function generationComplete() {
     }
 }
 
-function processCell(y, x) {
-    var neighbourCount = 0;
-    var alive = grid[y][x] === 1;
-
-    // Count neighbours
-    neighbourCount += (typeof grid[y][x-1] !== 'undefined') ? grid[y][x-1] : 0;
-    neighbourCount += (typeof grid[y][x+1] !== 'undefined') ? grid[y][x+1] : 0;
-    if(typeof grid[y-1] !== 'undefined') {
-        neighbourCount += (typeof grid[y-1][x] !== 'undefined') ? grid[y-1][x] : 0;
-        neighbourCount += (typeof grid[y-1][x-1] !== 'undefined') ? grid[y-1][x-1] : 0;
-        neighbourCount += (typeof grid[y-1][x+1] !== 'undefined') ? grid[y-1][x+1] : 0;
-    }
-    if(typeof grid[y+1] !== 'undefined') {
-        neighbourCount += (typeof grid[y+1][x] !== 'undefined') ? grid[y+1][x] : 0;
-        neighbourCount += (typeof grid[y+1][x-1] !== 'undefined') ? grid[y+1][x-1] : 0;
-        neighbourCount += (typeof grid[y+1][x+1] !== 'undefined') ? grid[y+1][x+1] : 0;
-    }
-
-    // Return status of cell
-    if((alive && neighbourCount === 2)
-        || (alive && neighbourCount === 3)
-        || (!alive && neighbourCount === 3)) {
-        return 1;
-    }
-    return 0;
-}
-
 function startProcessing() {
     iterationsToGo = parseInt(document.querySelector("#how-many-gens").value);
     nextGeneration();
