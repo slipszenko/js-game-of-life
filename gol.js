@@ -1,4 +1,4 @@
-var grid = createGrid(25, 40000, false);
+var grid = createGrid(25, 4000, false);
 var times = [];
 var generation = 0;
 var nWorkers = 1; // The number of workers to use, no greater than 8 until I find a better way to divide labour
